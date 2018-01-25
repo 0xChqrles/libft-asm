@@ -8,6 +8,8 @@
 #include <sys/stat.h>
 #include <sys/mman.h>
 
+// PART - 1
+
 int		ft_puts(const char *s);
 void	ft_bzero(void *s, size_t n);
 char	*ft_strcat(void *dest, void *src);
@@ -18,11 +20,25 @@ int		ft_isascii(int c);
 int		ft_isprint(int c);
 int		ft_tolower(int c);
 int		ft_toupper(int c);
+
+// PART - 2
+
 int		ft_strlen(const char *s);
 void	*ft_memset(void *b, int c, size_t len);
 void	*ft_memcpy(void *restrict dst, const void *restrict src, size_t n);
 char	*ft_strdup(const char *s1);
+
+// PART - 3
+
 void	ft_cat(int fd);
+
+// BONUS
+
+char	*ft_strcpy(char * dst, const char * src);
+void	*ft_strncpy(char * dst, const char * src, size_t len);
+char	*ft_strchr(const char *s, int c);
+int		ft_strcmp(const char *s1, const char *s2);
+char	*ft_strrchr(const char *s, int c);
 
 typedef	struct			s_test
 {
@@ -859,6 +875,293 @@ void	cat_tests(t_test **tests)
 }
 
 ///////////////////////////////
+//         ft_strcpy         //
+///////////////////////////////
+
+void	ft_strcpy_basic(t_subtest **subtests)
+{
+	SANDBOX(
+		char	*s1 = malloc(20);
+		char	*s2 = malloc(20);
+
+		s1 = memset(s1, 0x55, 20);
+		s2 = memset(s2, 0x55, 20);
+		s1 = strcpy(s1, "apocalypse 984");
+		s2 = ft_strcpy(s2, "apocalypse 984");
+		if (memcmp(s1, s2, 20))
+			exit(EXIT_FAILURE);
+		free(s1);
+		free(s2);
+	);
+	add_subtest(subtests, "Your ft_strcpy doesn't work with basic input", handle_status(0));
+}
+
+void	ft_strcpy_first_null(t_subtest **subtests)
+{
+	SANDBOX(
+		ft_strcpy(NULL, "bye");
+	);
+	add_subtest(subtests, "Your ft_strcpy doesn't segfault with a null destination", handle_status(SIGSEGV));
+}
+
+void	ft_strcpy_second_null(t_subtest **subtests)
+{
+	SANDBOX(
+		ft_strcpy(malloc(1), NULL);
+	);
+	add_subtest(subtests, "Your ft_strcpy doesn't segfault with a null source", handle_status(SIGSEGV));
+}
+
+void	strcpy_tests(t_test **tests)
+{
+	t_subtest	**subtests;
+
+	add_test(tests, "ft_strcpy");
+	subtests = get_last_subtest(tests);
+	ft_strcpy_basic(subtests);
+	ft_strcpy_first_null(subtests);
+	ft_strcpy_second_null(subtests);
+}
+
+///////////////////////////////
+//        ft_strncpy         //
+///////////////////////////////
+
+void	ft_strncpy_basic(t_subtest **subtests)
+{
+	SANDBOX(
+		char	*s1 = malloc(20);
+		char	*s2 = malloc(20);
+
+		s1 = memset(s1, 0x55, 20);
+		s2 = memset(s2, 0x55, 20);
+		s1 = strncpy(s1, "apocalypse 984", 18);
+		s2 = ft_strncpy(s2, "apocalypse 984", 18);
+		if (memcmp(s1, s2, 20))
+			exit(EXIT_FAILURE);
+		free(s1);
+		free(s2);
+	);
+	add_subtest(subtests, "Your ft_strncpy doesn't work with basic input", handle_status(0));
+}
+
+void	ft_strncpy_first_null(t_subtest **subtests)
+{
+	SANDBOX(
+		ft_strncpy(NULL, "bye", 1);
+	);
+	add_subtest(subtests, "Your ft_strncpy doesn't segfault with a null destination", handle_status(SIGSEGV));
+}
+
+void	ft_strncpy_second_null(t_subtest **subtests)
+{
+	SANDBOX(
+		ft_strncpy(malloc(1), NULL, 1);
+	);
+	add_subtest(subtests, "Your ft_strncpy doesn't segfault with a null source", handle_status(SIGSEGV));
+}
+
+void	ft_strncpy_zero(t_subtest **subtests)
+{
+	SANDBOX(
+		ft_strncpy(NULL, NULL, 0);
+	);
+	add_subtest(subtests, "Your ft_strncpy doesn't work with zero as len parameter", handle_status(0));
+}
+
+void	ft_strncpy_overflow(t_subtest **subtests)
+{
+	SANDBOX(
+		ft_strncpy(malloc(1), NULL, 1);
+	);
+	add_subtest(subtests, "Your ft_strncpy doesn't segfault when the second parameter is too big", handle_status(SIGSEGV));
+}
+
+void	strncpy_tests(t_test **tests)
+{
+	t_subtest	**subtests;
+
+	add_test(tests, "ft_strncpy");
+	subtests = get_last_subtest(tests);
+	ft_strncpy_basic(subtests);
+	ft_strncpy_first_null(subtests);
+	ft_strncpy_second_null(subtests);
+	ft_strncpy_zero(subtests);
+	ft_strncpy_overflow(subtests);
+}
+
+///////////////////////////////
+//         ft_strchr         //
+///////////////////////////////
+
+void	ft_strchr_basic_found(t_subtest **subtests)
+{
+	SANDBOX(
+		char	*s = ft_strchr("prendre des petits bouts de trucs", 'b');
+
+		if (strcmp(s, "bouts de trucs"))
+			exit(EXIT_FAILURE);
+	);
+	add_subtest(subtests, "Your ft_strchr doesn't work with basic input", handle_status(0));
+}
+
+void	ft_strchr_basic_not_found(t_subtest **subtests)
+{
+	SANDBOX(
+		if (ft_strchr("prendre des petits bouts de trucs", 'z'))
+			exit(EXIT_FAILURE);
+	);
+	add_subtest(subtests, "Your ft_strchr doesn't work with basic input", handle_status(0));
+}
+
+void	ft_strchr_multiple_found(t_subtest **subtests)
+{
+	SANDBOX(
+		char	*s = ft_strchr("prendre des petits bouts de trucs et puis les assembler ensemble", 'b');
+
+		if (strcmp(s, "bouts de trucs et puis les assembler ensemble"))
+			exit(EXIT_FAILURE);
+	);
+	add_subtest(subtests, "Your ft_strchr doesn't work with multiple occurence of c parameter", handle_status(0));
+}
+
+void	ft_strchr_null(t_subtest **subtests)
+{
+	SANDBOX(
+		ft_strchr(NULL, 0x55);
+	);
+	add_subtest(subtests, "Your ft_strchr doesn't segfault with null parameter", handle_status(SIGSEGV));
+}
+
+void	strchr_tests(t_test **tests)
+{
+	t_subtest	**subtests;
+
+	add_test(tests, "ft_strchr");
+	subtests = get_last_subtest(tests);
+	ft_strchr_basic_found(subtests);
+	ft_strchr_basic_not_found(subtests);
+	ft_strchr_multiple_found(subtests);
+	ft_strchr_null(subtests);
+}
+
+///////////////////////////////
+//         ft_strcmp         //
+///////////////////////////////
+
+void	ft_strcmp_equal_basic(t_subtest **subtests)
+{
+	SANDBOX(
+		if (ft_strcmp(S_1, S_1) != strcmp(S_1, S_1))
+			exit(EXIT_FAILURE);
+	);
+	add_subtest(subtests, "Your ft_strcmp doesn't work with basic input", handle_status(0));
+}
+
+void	ft_strcmp_different_basic(t_subtest **subtests)
+{
+	SANDBOX(
+		if (ft_strcmp(S_1, "nope dude") != strcmp(S_1, "nope dude"))
+			exit(EXIT_FAILURE);
+	);
+	add_subtest(subtests, "Your ft_strcmp doesn't work with basic input", handle_status(0));
+}
+
+void	ft_strcmp_equal_detect_end(t_subtest **subtests)
+{
+	SANDBOX(
+		if (ft_strcmp(S_2, "bye") != strcmp(S_2, "bye"))
+			exit(EXIT_FAILURE);
+	);
+	add_subtest(subtests, "Your ft_strcmp doesn't work with characters after the '\\0'", handle_status(0));
+}
+
+void	ft_strcmp_different_detect_end(t_subtest **subtests)
+{
+	SANDBOX(
+		if (ft_strcmp(S_2, "nope dude") != strcmp(S_2, "nope dude"))
+			exit(EXIT_FAILURE);
+	);
+	add_subtest(subtests, "Your ft_strcmp doesn't work with characters after the '\\0'", handle_status(0));
+}
+
+void	ft_strcmp_null(t_subtest **subtests)
+{
+	SANDBOX(
+		ft_strcmp(NULL, NULL);
+	);
+	add_subtest(subtests, "Your ft_strcmp doesn't segfault with null parameter", handle_status(SIGSEGV));
+}
+
+void	strcmp_tests(t_test **tests)
+{
+	t_subtest	**subtests;
+
+	add_test(tests, "ft_strcmp");
+	subtests = get_last_subtest(tests);
+	ft_strcmp_equal_basic(subtests);
+	ft_strcmp_different_basic(subtests);
+	ft_strcmp_equal_detect_end(subtests);
+	ft_strcmp_different_detect_end(subtests);
+	ft_strcmp_null(subtests);
+}
+
+///////////////////////////////
+//        ft_strrchr         //
+///////////////////////////////
+
+void	ft_strrchr_basic_found(t_subtest **subtests)
+{
+	SANDBOX(
+		char	*s = ft_strrchr("prendre des petits bouts de trucs", 'b');
+
+		if (strcmp(s, "bouts de trucs"))
+			exit(EXIT_FAILURE);
+	);
+	add_subtest(subtests, "Your ft_strrchr doesn't work with basic input", handle_status(0));
+}
+
+void	ft_strrchr_basic_not_found(t_subtest **subtests)
+{
+	SANDBOX(
+		if (ft_strrchr("prendre des petits bouts de trucs", 'z'))
+			exit(EXIT_FAILURE);
+	);
+	add_subtest(subtests, "Your ft_strrchr doesn't work with basic input", handle_status(0));
+}
+
+void	ft_strrchr_multiple_found(t_subtest **subtests)
+{
+	SANDBOX(
+		char	*s = ft_strrchr("prendre des petits bouts de trucs et puis les assembler ensemble", 'b');
+
+		if (strcmp(s, "ble"))
+			exit(EXIT_FAILURE);
+	);
+	add_subtest(subtests, "Your ft_strrchr doesn't work with multiple occurence of c parameter", handle_status(0));
+}
+
+void	ft_strrchr_null(t_subtest **subtests)
+{
+	SANDBOX(
+		ft_strrchr(NULL, 0x55);
+	);
+	add_subtest(subtests, "Your ft_strrchr doesn't segfault with null parameter", handle_status(SIGSEGV));
+}
+
+void	strrchr_tests(t_test **tests)
+{
+	t_subtest	**subtests;
+
+	add_test(tests, "ft_strrchr");
+	subtests = get_last_subtest(tests);
+	ft_strrchr_basic_found(subtests);
+	ft_strrchr_basic_not_found(subtests);
+	ft_strrchr_multiple_found(subtests);
+	ft_strrchr_null(subtests);
+}
+
+///////////////////////////////
 //           main            //
 ///////////////////////////////
 
@@ -892,6 +1195,14 @@ int	main(int ac, char **av)
 	// PART - 3
 
 	cat_tests(&tests);
+
+	// BONUS
+
+	strcpy_tests(&tests);
+	strncpy_tests(&tests);
+	strchr_tests(&tests);
+	strcmp_tests(&tests);
+	strrchr_tests(&tests);
 
 	display_results(tests);
 }
