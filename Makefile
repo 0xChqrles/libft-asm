@@ -1,5 +1,5 @@
 NAME			=	libft.a
-UNIT_TEST		=	lib_test
+UNIT_TEST		=	libtest
 
 CFLAGS			=	-g
 CC				=	gcc
@@ -11,7 +11,7 @@ SRCS_DIR		=	srcs/
 SRCS			=	$(addprefix $(SRCS_DIR), $(SRCS_LIST))
 
 UNIT_SRCS_LIST	=	main.c
-UNIT_SRCS_DIR	=	unit_srcs/
+UNIT_SRCS_DIR	=	libtest_srcs/
 UNIT_SRCS		=	$(addprefix $(UNIT_SRCS_DIR), $(UNIT_SRCS_LIST))
 
 OBJS_LIST		=	$(patsubst %.s, %.o, $(SRCS_LIST))
@@ -19,7 +19,7 @@ OBJS_DIR		=	objs/
 OBJS			=	$(addprefix $(OBJS_DIR), $(OBJS_LIST))
 
 UNIT_OBJS_LIST	=	$(patsubst %.c, %.o, $(UNIT_SRCS_LIST))
-UNIT_OBJS_DIR	=	unit_objs/
+UNIT_OBJS_DIR	=	libtest_objs/
 UNIT_OBJS		=	$(addprefix $(UNIT_OBJS_DIR), $(UNIT_OBJS_LIST))
 
 .PHONY: test all re clean fclean
