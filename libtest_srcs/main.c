@@ -352,7 +352,7 @@ void	ft_strcat_first_null(t_subtest **subtests)
 	SANDBOX(
 		ft_strcat(NULL, "\0");
 	);
-	add_subtest(subtests, "Your ft_strcat doesn't work with an empty destination", handle_status(SIGSEGV));
+	add_subtest(subtests, "Your ft_strcat doesn't segfault with an empty destination", handle_status(SIGSEGV));
 }
 
 void	ft_strcat_second_null(t_subtest **subtests)
@@ -363,7 +363,7 @@ void	ft_strcat_second_null(t_subtest **subtests)
 		s[0] = 0;
 		ft_strcat(s, NULL);
 	);
-	add_subtest(subtests, "Your ft_strcat doesn't work with an empty source", handle_status(SIGSEGV));
+	add_subtest(subtests, "Your ft_strcat doesn't segfault with an empty source", handle_status(SIGSEGV));
 }
 
 void	ft_strcat_both_null(t_subtest **subtests)
@@ -371,7 +371,7 @@ void	ft_strcat_both_null(t_subtest **subtests)
 	SANDBOX(
 		ft_strcat(NULL, NULL);
 	);
-	add_subtest(subtests, "Your ft_strcat doesn't work with null parameters", handle_status(SIGSEGV));
+	add_subtest(subtests, "Your ft_strcat doesn't segfault with null parameters", handle_status(SIGSEGV));
 }
 
 void	strcat_tests(t_test **tests)
