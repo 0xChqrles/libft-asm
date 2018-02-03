@@ -836,8 +836,6 @@ void	ft_cat_basic(t_subtest **subtests)
 		char		*ptr;
  		int			len;
 		int			ret;
-		char		buf[len];
-		char		*cmd;
 		int			fd;
 		struct stat	sbuf;
 
@@ -846,6 +844,7 @@ void	ft_cat_basic(t_subtest **subtests)
 		if ((ptr = mmap(0, sbuf.st_size, PROT_READ, MAP_PRIVATE, fd, 0)) == MAP_FAILED)
 			exit(EXIT_FAILURE);
 		len = strlen(ptr);
+		char		buf[len];
 		fd_to_buf(STDOUT);
 		ft_cat(fd);
 		ret = read(fildes[0], &buf, len);
@@ -1169,6 +1168,7 @@ int	main(int ac, char **av)
 {
 	t_test		*tests;
 
+	(void)ac;
 	binary_name = av[0];
 	tests = NULL;
 

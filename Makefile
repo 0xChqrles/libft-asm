@@ -1,13 +1,13 @@
 NAME			=	libft.a
 UNIT_TEST		=	libtest
 
-CFLAGS			=	-g
+CFLAGS			=	-Wall -Wextra -Werror
 CC				=	gcc
 
 SRCS_LIST		=	ft_puts.s ft_bzero.s ft_strcat.s ft_isalpha.s ft_isdigit.s \
 					ft_isalnum.s ft_isascii.s ft_isprint.s ft_tolower.s ft_toupper.s \
-					ft_strlen.s ft_memset.s ft_memcpy.s ft_strdup.s ft_cat.s ft_memccpy.s \
-					ft_strcpy.s ft_strncpy.s ft_strchr.s ft_strcmp.s ft_strrchr.s
+					ft_strlen.s ft_memset.s ft_memcpy.s ft_strdup.s ft_cat.s ft_strcpy.s \
+					ft_strncpy.s ft_strchr.s ft_strcmp.s ft_strrchr.s
 SRCS_DIR		=	srcs/
 SRCS			=	$(addprefix $(SRCS_DIR), $(SRCS_LIST))
 
