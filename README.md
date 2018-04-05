@@ -1,6 +1,6 @@
 # libft-asm
 
-The libasm is a small library in ASM
+The libasm is a small library in ASM, with a main (in C) to test each function.
 
 - bzero
 - strcat
